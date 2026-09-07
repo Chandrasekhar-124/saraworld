@@ -9,6 +9,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
   query,
   where,
   orderBy,
@@ -40,11 +41,14 @@ export default function AdminPage() {
   const [itemPrice, setItemPrice] = useState('')
   const [itemDesc, setItemDesc] = useState('')
   const [itemFile, setItemFile] = useState(null)
+  const [itemCustom, setItemCustom] = useState(false)
+  const [editingItem, setEditingItem] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [whatsapp, setWhatsapp] = useState(settings.whatsappNumber || '8500554096')
   const [instagram, setInstagram] = useState(settings.instagram || 'saraworldd12')
   const [youtube, setYoutube] = useState(settings.youtube || '')
   const [catalogueLink, setCatalogueLink] = useState(settings.cataloguePdfUrl || '')
+  const [customTagline, setCustomTagline] = useState(settings.customTagline || 'Love a design? Send us your ideas — we customize to your taste!')
   const [saved, setSaved] = useState(false)
 
   const fetchItems = useCallback(async () => {
@@ -83,38 +87,68 @@ export default function AdminPage() {
     }
   }
 
+  function clearForm() {
+    setItemName(''); setItemPrice(''); setItemDesc('')
+    setItemFile(null); setItemCustom(false); setEditingItem(null)
+  }
+
+  function handleEdit(item) {
+    setItemName(item.name || '')
+    setItemPrice(item.price || '')
+    setItemDesc(item.description || '')
+    setItemCustom(item.customizable || false)
+    setEditingItem(item)
+    setItemFile(null)
+  }
+
   async function handleAddItem(e) {
     e.preventDefault()
-    if (!itemName.trim() || !itemFile) return
+    if (!itemName.trim() || (!itemFile && !editingItem)) return
     setUploading(true)
     setError('')
     if (DEMO) {
-      const url = URL.createObjectURL(itemFile)
-      setItems(prev => [{ id: `demo-${Date.now()}`, name: itemName.trim(), price: itemPrice.trim(), description: itemDesc.trim(), imageUrl: url }, ...prev])
-      setItemName(''); setItemPrice(''); setItemDesc('')
-      setItemFile(null)
+      const url = itemFile ? URL.createObjectURL(itemFile) : editingItem?.imageUrl
+      if (editingItem) {
+        setItems(prev => prev.map(i => i.id === editingItem.id ? { ...i, name: itemName.trim(), price: itemPrice.trim(), description: itemDesc.trim(), customizable: itemCustom, imageUrl: url } : i))
+      } else {
+        setItems(prev => [{ id: `demo-${Date.now()}`, name: itemName.trim(), price: itemPrice.trim(), description: itemDesc.trim(), customizable: itemCustom, imageUrl: url }, ...prev])
+      }
+      clearForm()
       setUploading(false)
       return
     }
     try {
-      const path = `items/${Date.now()}_${itemFile.name}`
-      const storageRef = ref(storage, path)
-      await uploadBytes(storageRef, itemFile)
-      const imageUrl = await getDownloadURL(storageRef)
-      await addDoc(collection(db, 'items'), {
+      let imageUrl = editingItem?.imageUrl
+      let storagePath = editingItem?.storagePath
+      if (itemFile) {
+        // Delete old image if replacing
+        if (editingItem?.storagePath) {
+          try { await deleteObject(ref(storage, editingItem.storagePath)) } catch {}
+        }
+        const path = `items/${Date.now()}_${itemFile.name}`
+        const storageRef = ref(storage, path)
+        await uploadBytes(storageRef, itemFile)
+        imageUrl = await getDownloadURL(storageRef)
+        storagePath = path
+      }
+      const data = {
         name: itemName.trim(),
         price: itemPrice.trim(),
         description: itemDesc.trim(),
+        customizable: itemCustom,
         category: selectedCat,
         imageUrl,
-        storagePath: path,
-        createdAt: serverTimestamp(),
-      })
-      setItemName(''); setItemPrice(''); setItemDesc('')
-      setItemFile(null)
+        storagePath,
+      }
+      if (editingItem) {
+        await updateDoc(doc(db, 'items', editingItem.id), data)
+      } else {
+        await addDoc(collection(db, 'items'), { ...data, createdAt: serverTimestamp() })
+      }
+      clearForm()
       fetchItems()
     } catch (err) {
-      setError('Upload failed: ' + err.message)
+      setError((editingItem ? 'Update' : 'Upload') + ' failed: ' + err.message)
     }
     setUploading(false)
   }
@@ -148,6 +182,7 @@ export default function AdminPage() {
           instagram: instagram,
           youtube: youtube,
           cataloguePdfUrl: catalogueLink,
+          customTagline: customTagline,
         },
         { merge: true }
       )
@@ -243,15 +278,30 @@ export default function AdminPage() {
             type="file"
             accept="image/*"
             onChange={(e) => setItemFile(e.target.files?.[0] || null)}
-            required
+            {...(!editingItem && { required: true })}
           />
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={uploading}
-          >
-            {uploading ? 'Uploading...' : 'Add Item'}
-          </button>
+          <label className="custom-check">
+            <input
+              type="checkbox"
+              checked={itemCustom}
+              onChange={(e) => setItemCustom(e.target.checked)}
+            />
+            Customization available
+          </label>
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={uploading}
+            >
+              {uploading ? 'Saving...' : editingItem ? 'Update Item' : 'Add Item'}
+            </button>
+            {editingItem && (
+              <button type="button" className="btn btn-secondary" onClick={clearForm}>
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
 
         <div className="admin-grid">
@@ -261,12 +311,11 @@ export default function AdminPage() {
               <p>{item.name}</p>
               {item.price && <p className="item-price">{item.price}</p>}
               {item.description && <p className="item-desc">{item.description}</p>}
-              <button
-                className="btn btn-danger"
-                onClick={() => handleDelete(item)}
-              >
-                Delete
-              </button>
+              {item.customizable && <span className="custom-badge">Customizable</span>}
+              <div className="item-actions">
+                <button className="btn btn-secondary" onClick={() => handleEdit(item)}>Edit</button>
+                <button className="btn btn-danger" onClick={() => handleDelete(item)}>Delete</button>
+              </div>
             </div>
           ))}
           {items.length === 0 && (
@@ -304,6 +353,13 @@ export default function AdminPage() {
           value={catalogueLink}
           onChange={(e) => setCatalogueLink(e.target.value)}
           placeholder="https://drive.google.com/..."
+        />
+        <label className="field-label">Customization Tagline (shown on each collection)</label>
+        <input
+          type="text"
+          value={customTagline}
+          onChange={(e) => setCustomTagline(e.target.value)}
+          placeholder="Love a design? Send us your ideas — we customize to your taste!"
         />
         <button className="btn btn-primary" onClick={handleSaveSettings} style={{ marginTop: '1rem' }}>
           {saved ? 'Saved!' : 'Save All Settings'}

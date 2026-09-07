@@ -9,7 +9,8 @@ const DEFAULT_SETTINGS = {
   whatsappNumber: '8500554096',
   instagram: 'saraworldd12',
   youtube: 'https://www.youtube.com/@saraworldd12',
-  cataloguePdfUrl: 'https://drive.google.com/file/d/demo-catalogue',
+  cataloguePdfUrl: '',
+  customTagline: 'Love a design? Send us your ideas — we customize to your taste!',
 }
 
 const AppContext = createContext({ user: null, settings: DEFAULT_SETTINGS })

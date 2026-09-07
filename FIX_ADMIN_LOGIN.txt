@@ -1,0 +1,134 @@
+================================================================
+   FIX: ADMIN LOGIN "INVALID CREDENTIALS" ERROR
+================================================================
+
+The admin login fails because the Identity Toolkit API is not
+enabled for your Firebase project. Follow these steps to fix it.
+
+================================================================
+OPTION A: SAME PROJECT (saraworld-f3a84)
+================================================================
+
+If you are using the SAME Firebase project (saraworld-f3a84):
+
+STEP 1: Enable Identity Toolkit API
+---------------------------------------
+1. Go to https://console.cloud.google.com
+2. At the top, make sure project "saraworld-f3a84" is selected
+   (click the project dropdown next to "Google Cloud" logo)
+3. In the left sidebar, click "APIs & Services"
+4. Click "Enabled APIs & Services"
+5. Check if "Identity Toolkit API" is in the list
+6. If NOT listed:
+   a. Click "+ ENABLE APIS AND SERVICES" at the top
+   b. Search for "Identity Toolkit API"
+   c. Click on it
+   d. Click "ENABLE"
+7. Wait 1-2 minutes for it to activate
+
+STEP 2: Verify Authentication is Set Up
+---------------------------------------
+1. Go to https://console.firebase.google.com
+2. Open your project (saraworld-f3a84)
+3. Left sidebar → Build → Authentication
+4. Make sure "Email/Password" is ENABLED under Sign-in method
+5. Go to "Users" tab
+6. Make sure there is a user with email: admin@saraworld.com
+   - If not, click "Add user"
+   - Email: admin@saraworld.com
+   - Password: admin123
+   - Click "Add user"
+
+STEP 3: Test the Login
+---------------------------------------
+1. Go to https://saraworld.vercel.app/admin
+2. Enter: admin@saraworld.com / admin123
+3. Click Login
+4. You should see the Admin Panel
+
+================================================================
+OPTION B: NEW PROJECT (different project)
+================================================================
+
+If you created a NEW Firebase project, the API keys have changed.
+You need to update the config values.
+
+STEP 1: Get New Config Values
+---------------------------------------
+1. Go to https://console.firebase.google.com
+2. Open your NEW project
+3. Click the gear icon (⚙) next to "Project Overview"
+4. Click "Project settings"
+5. Scroll down to "Your apps" section
+6. If no web app exists, click "Add app" → Web (</>) icon
+   - App nickname: SaraWorld
+   - Click "Register app"
+7. You will see a config block like this:
+
+   const firebaseConfig = {
+     apiKey: "AIzaSy...",
+     authDomain: "your-project.firebaseapp.com",
+     projectId: "your-project",
+     storageBucket: "your-project.firebasestorage.app",
+     messagingSenderId: "123456789",
+     appId: "1:123456789:web:abc123"
+   };
+
+8. Copy ALL 6 values and send them to the developer
+
+STEP 2: Enable Authentication
+---------------------------------------
+1. Left sidebar → Build → Authentication → Get Started
+2. Click "Email/Password" → Enable → Save
+3. Users tab → Add user:
+   Email: admin@saraworld.com
+   Password: admin123
+
+STEP 3: Enable Firestore
+---------------------------------------
+1. Left sidebar → Build → Firestore Database
+2. Click "Create database"
+3. Select "Start in test mode" → Next
+4. Choose region (asia-south1 for India) → Enable
+
+STEP 4: Enable Storage
+---------------------------------------
+1. Left sidebar → Build → Storage
+2. Click "Get Started"
+3. Select "Start in test mode" → Next → Done
+4. Requires Blaze plan (free within limits)
+
+STEP 5: Update Environment Variables
+---------------------------------------
+The developer will update the config in TWO places:
+
+A) Local file (.env.local):
+   NEXT_PUBLIC_FB_API_KEY=<new apiKey>
+   NEXT_PUBLIC_FB_AUTH_DOMAIN=<new authDomain>
+   NEXT_PUBLIC_FB_PROJECT_ID=<new projectId>
+   NEXT_PUBLIC_FB_STORAGE_BUCKET=<new storageBucket>
+   NEXT_PUBLIC_FB_MESSAGING_SENDER_ID=<new messagingSenderId>
+   NEXT_PUBLIC_FB_APP_ID=<new appId>
+
+B) Vercel Dashboard:
+   1. Go to https://vercel.com → your project (saraworld)
+   2. Settings → Environment Variables
+   3. Update all 6 values with the new ones
+   4. Click "Redeploy" from the Deployments tab
+
+================================================================
+QUICK CHECK: WHICH OPTION DO I NEED?
+================================================================
+
+  Q: Did you create a brand new Firebase project?
+  A: YES → Follow OPTION B (new config values needed)
+  A: NO, same project → Follow OPTION A (just enable the API)
+
+================================================================
+ADMIN CREDENTIALS (same for both options)
+================================================================
+
+  Email:     admin@saraworld.com
+  Password:  admin123
+
+================================================================
