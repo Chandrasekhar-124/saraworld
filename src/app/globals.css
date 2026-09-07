@@ -67,12 +67,6 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 4
 
 .hero-logo {
   margin-bottom: 2rem;
-  animation: logoIn 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-}
-
-@keyframes logoIn {
-  from { opacity: 0; transform: scale(0.5) rotate(-12deg); }
-  to { opacity: 1; transform: scale(1) rotate(0); }
 }
 
 .logo-img {
@@ -112,17 +106,6 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 4
 
 .hw {
   display: inline-block;
-  opacity: 0;
-  animation: wordUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.hw:nth-child(1) { animation-delay: 0.6s; }
-.hw:nth-child(2) { animation-delay: 0.8s; }
-.hw:nth-child(3) { animation-delay: 1s; }
-
-@keyframes wordUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .accent {
@@ -134,20 +117,15 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 4
 .hero-sub {
   font-size: 0.82rem; text-transform: uppercase;
   letter-spacing: 0.18em; color: var(--muted-dark);
-  animation: fadeIn 1s ease 1.3s both;
 }
 
 .hero-divider {
   width: 70px; height: 1.5px; margin: 1.25rem auto 2rem;
   background: linear-gradient(90deg, transparent, var(--rose), transparent);
-  animation: fadeIn 1s ease 1.5s both;
 }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .hero-btns {
   display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
-  animation: fadeIn 0.8s ease 1.7s both;
 }
 
 /* Buttons */
@@ -176,7 +154,6 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 4
   position: absolute; bottom: 2rem; z-index: 1;
   background: none; border: none; cursor: pointer;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  animation: fadeIn 1s ease 2.2s both;
 }
 .mouse {
   width: 22px; height: 36px; border: 2px solid var(--rose);
