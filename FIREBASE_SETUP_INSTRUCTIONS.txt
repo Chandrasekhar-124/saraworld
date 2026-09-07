@@ -1,0 +1,106 @@
+================================================================
+   FIREBASE SETUP INSTRUCTIONS FOR SARAWORLD
+================================================================
+
+Hi! Please follow these steps to set up Firebase for the
+SaraWorld jewelry website. At the end, send back the values
+listed in the OUTPUT NEEDED section.
+
+================================================================
+STEP 1: CREATE FIREBASE PROJECT
+================================================================
+
+1. Go to: https://console.firebase.google.com
+2. Sign in with your Google/Gmail account
+3. Click "Add project"
+4. Project name: saraworld
+5. Click Continue
+6. Turn OFF Google Analytics (not needed)
+7. Click "Create project"
+8. Wait, then click "Continue"
+
+================================================================
+STEP 2: REGISTER A WEB APP
+================================================================
+
+1. On the project dashboard, click the  </>  (web) icon
+2. App nickname: saraworld
+3. Do NOT check "Firebase Hosting"
+4. Click "Register app"
+5. You will see a code block like this:
+
+   const firebaseConfig = {
+     apiKey: "AIzaSy...",
+     authDomain: "saraworld-xxxxx.firebaseapp.com",
+     projectId: "saraworld-xxxxx",
+     storageBucket: "saraworld-xxxxx.firebasestorage.app",
+     messagingSenderId: "123456789",
+     appId: "1:123456789:web:abc123..."
+   };
+
+   >>> COPY ALL 6 VALUES — these are needed! <<<
+
+6. Click "Continue to console"
+
+================================================================
+STEP 3: ENABLE EMAIL/PASSWORD AUTHENTICATION
+================================================================
+
+1. In left sidebar: Build > Authentication
+2. Click "Get started"
+3. Click "Email/Password"
+4. Toggle the FIRST switch ON (Email/Password)
+5. Click "Save"
+
+Now create the admin account:
+
+6. Go to "Users" tab
+7. Click "Add user"
+8. Enter:
+   - Email: (any email for admin login)
+   - Password: (choose a strong password)
+9. Click "Add user"
+
+   >>> REMEMBER THIS EMAIL & PASSWORD — needed to login as admin! <<<
+
+================================================================
+STEP 4: CREATE FIRESTORE DATABASE
+================================================================
+
+1. In left sidebar: Build > Firestore Database
+2. Click "Create database"
+3. Location: pick closest region (e.g. asia-south1 for India)
+4. Select "Start in test mode"
+5. Click "Create"
+
+================================================================
+STEP 5: ENABLE STORAGE
+================================================================
+
+1. In left sidebar: Build > Storage
+2. Click "Get started"
+3. Select "Start in test mode" > click "Next"
+4. Keep default location > click "Done"
+
+================================================================
+                    OUTPUT NEEDED
+================================================================
+
+Please send back these values after completing all steps:
+
+1. API Key:              ___________________________
+2. Auth Domain:          ___________________________
+3. Project ID:           ___________________________
+4. Storage Bucket:       ___________________________
+5. Messaging Sender ID:  ___________________________
+6. App ID:               ___________________________
+7. Admin Email:          ___________________________
+8. Admin Password:       ___________________________
+
+(Values 1-6 come from Step 2 — the firebaseConfig code block)
+(Values 7-8 come from Step 3 — the admin user you created)
+
+================================================================
+NOTE: This should take about 10 minutes. All services used are
+on Firebase's free tier (Spark plan) — no payment needed.
+================================================================

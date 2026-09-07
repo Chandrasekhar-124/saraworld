@@ -1,0 +1,110 @@
+================================================================
+   FIREBASE AUTHENTICATION SETUP — FOR SARAWORLD ADMIN
+================================================================
+
+This takes 3 minutes. Follow each step exactly.
+
+================================================================
+STEP 1: ENABLE AUTHENTICATION
+================================================================
+
+1. Go to https://console.firebase.google.com
+2. Click on your project: "saraworld-f3a84"
+3. In the left sidebar, click "Build" to expand it
+4. Click "Authentication"
+5. Click the big "Get Started" button
+6. You'll see a list of sign-in providers
+7. Click "Email/Password" (the first one)
+8. Toggle the FIRST switch to ENABLE it
+   (Leave the second "Email link" toggle OFF)
+9. Click "Save"
+
+Done! Authentication is now enabled.
+
+================================================================
+STEP 2: CREATE THE ADMIN USER
+================================================================
+
+1. You should now be on the Authentication page
+2. Click the "Users" tab at the top
+3. Click "Add user" button
+4. Enter these details EXACTLY:
+
+   Email:     admin@saraworld.com
+   Password:  admin123
+
+5. Click "Add user"
+
+Done! The admin account is created.
+
+================================================================
+STEP 3: SET UP FIRESTORE DATABASE (if not already done)
+================================================================
+
+1. In the left sidebar, click "Build" → "Firestore Database"
+2. If you see "Create database", click it:
+   - Select "Start in test mode"
+   - Click "Next"
+   - Choose any region (asia-south1 is closest for India)
+   - Click "Enable"
+3. If you already see a database, skip this step
+
+================================================================
+STEP 4: SET UP STORAGE (if not already done)
+================================================================
+
+1. In the left sidebar, click "Build" → "Storage"
+2. If you see "Get Started", click it:
+   - Select "Start in test mode"
+   - Click "Next"
+   - Click "Done"
+3. This requires the Blaze plan (see FIREBASE_STORAGE_GUIDE.txt)
+4. If you already see a storage bucket, skip this step
+
+================================================================
+STEP 5: VERIFY EVERYTHING WORKS
+================================================================
+
+After completing the above steps, go to the SaraWorld website:
+
+1. Click "Admin" at the bottom of the page
+2. Login with:
+   Email:     admin@saraworld.com
+   Password:  admin123
+3. You should see the Admin Panel
+4. Try adding an item with a name, price, description, and photo
+5. Go back to the homepage and check if the item appears
+
+================================================================
+TROUBLESHOOTING
+================================================================
+
+"Invalid credentials" on login:
+  → Make sure you completed Step 1 (enable Email/Password)
+  → Make sure you completed Step 2 (create the user)
+  → Check the email is exactly: admin@saraworld.com
+
+"Upload failed" when adding items:
+  → Make sure you completed Step 4 (Storage setup)
+  → Make sure you're on the Blaze plan
+
+Items don't appear on homepage:
+  → Make sure you completed Step 3 (Firestore setup)
+  → Wait 5 seconds and refresh the page
+
+================================================================
+SUMMARY OF WHAT TO ENABLE
+================================================================
+
+  Service          Where                       Status Needed
+  ---------------  --------------------------  ------------
+  Authentication   Build → Authentication      ENABLED
+  Email/Password   Authentication → Sign-in    ENABLED
+  Admin User       Authentication → Users      CREATED
+  Firestore        Build → Firestore Database  CREATED
+  Storage          Build → Storage             CREATED
+
+All of these are FREE within Firebase's generous free tier.
+See FIREBASE_STORAGE_GUIDE.txt for billing details.
+
+================================================================

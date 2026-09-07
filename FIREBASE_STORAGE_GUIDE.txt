@@ -1,0 +1,110 @@
+================================================================
+   FIREBASE STORAGE SETUP — FREE TIER GUIDE
+================================================================
+
+To enable image uploads for SaraWorld, Firebase requires the
+"Blaze" plan. Don't worry — IT IS FREE for our usage level.
+
+================================================================
+WHY IT ASKS FOR AN UPGRADE
+================================================================
+
+Firebase changed their policy — Storage now requires the Blaze
+(pay-as-you-go) plan. But "pay-as-you-go" does NOT mean you
+will be charged. You only pay IF you exceed the free limits,
+which a small jewelry website will NEVER reach.
+
+Think of it like a prepaid SIM — you add a card but only pay
+if you use extra data beyond your free quota.
+
+================================================================
+HOW TO UPGRADE (takes 2 minutes)
+================================================================
+
+1. Go to Firebase Console → your project (saraworld)
+2. Click "Upgrade" at the bottom-left
+3. Select "Blaze" plan
+4. Add a debit/credit card
+5. You will see: "Estimated monthly cost: $0.00"
+6. Click "Purchase"
+7. Now go to Build → Storage → Get Started → Test Mode → Done
+
+That's it. Your card will NOT be charged.
+
+================================================================
+FREE LIMITS — WHAT YOU GET FOR $0
+================================================================
+
+SERVICE             FREE LIMIT              FOR SARAWORLD
+-----------         ----------------------  ----------------
+Storage Space       5 GB total              ~5,000 product
+                                            photos (1MB each)
+
+Downloads           1 GB per day            ~1,000 visitors
+                                            viewing photos/day
+
+Upload Operations   20,000 per day          Upload 20,000
+                                            images per day
+
+Firestore DB        1 GB storage            Unlimited product
+                    50,000 reads/day        entries
+                    20,000 writes/day
+
+Authentication      Unlimited               Unlimited admin
+                    (email/password)         logins
+
+Hosting             10 GB storage           Full website
+                    360 MB/day transfer
+
+================================================================
+WILL WE EVER EXCEED THIS?
+================================================================
+
+NO. Here's why:
+
+- A jewelry showcase with 200-500 items uses ~500 MB max
+  (Free limit: 5,000 MB = 5 GB)
+
+- Even if 500 people visit per day, downloads would be
+  ~300 MB/day (Free limit: 1,000 MB = 1 GB/day)
+
+- Admin uploads maybe 5-10 images per week
+  (Free limit: 20,000 uploads/day)
+
+This site could run 100% FREE for YEARS without hitting
+any limit.
+
+================================================================
+HOW LONG DOES THE FREE TIER LAST?
+================================================================
+
+- There is NO time limit or trial period
+- The free limits are PERMANENT — they don't expire
+- You get these limits every single day/month, forever
+- Google has maintained these free limits since 2016
+- If you stay within limits, your bill is $0 every month
+
+================================================================
+WHAT IF WE SOMEHOW EXCEED A LIMIT?
+================================================================
+
+- Firebase sends email warnings BEFORE you're charged
+- You can set a budget alert (e.g. alert at $1)
+- You can downgrade back to free "Spark" plan anytime
+  (you just lose Storage access)
+- Typical overage costs are tiny:
+  Storage: $0.026/GB per month
+  Downloads: $0.12/GB
+
+================================================================
+SUMMARY
+================================================================
+
+  Cost to set up:     $0
+  Monthly cost:       $0 (within free limits)
+  Time limit:         None — free forever
+  Card required:      Yes (but not charged)
+  Risk:               Zero for a small showcase site
+
+Proceed with the Blaze upgrade. It is safe and free.
+================================================================
