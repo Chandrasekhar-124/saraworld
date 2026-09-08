@@ -16,8 +16,7 @@ import {
   setDoc,
   serverTimestamp,
 } from 'firebase/firestore'
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
-import { auth, db, storage } from '../../lib/firebase'
+import { auth, db } from '../../lib/firebase'
 import { useApp } from '../providers'
 
 const CATEGORIES = [
@@ -26,7 +25,19 @@ const CATEGORIES = [
   { id: 'hair-ornaments', label: 'Hair Ornaments' },
 ]
 
-// ponytail: demo mode flag, true when Firebase not configured
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+
+async function uploadToCloudinary(file) {
+  const fd = new FormData()
+  fd.append('file', file)
+  fd.append('upload_preset', UPLOAD_PRESET)
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: fd })
+  if (!res.ok) throw new Error('Image upload failed')
+  const data = await res.json()
+  return { url: data.secure_url, publicId: data.public_id }
+}
+
 const DEMO = !auth
 
 export default function AdminPage() {
@@ -119,17 +130,9 @@ export default function AdminPage() {
     }
     try {
       let imageUrl = editingItem?.imageUrl
-      let storagePath = editingItem?.storagePath
       if (itemFile) {
-        // Delete old image if replacing
-        if (editingItem?.storagePath) {
-          try { await deleteObject(ref(storage, editingItem.storagePath)) } catch {}
-        }
-        const path = `items/${Date.now()}_${itemFile.name}`
-        const storageRef = ref(storage, path)
-        await uploadBytes(storageRef, itemFile)
-        imageUrl = await getDownloadURL(storageRef)
-        storagePath = path
+        const uploaded = await uploadToCloudinary(itemFile)
+        imageUrl = uploaded.url
       }
       const data = {
         name: itemName.trim(),
@@ -138,7 +141,6 @@ export default function AdminPage() {
         customizable: itemCustom,
         category: selectedCat,
         imageUrl,
-        storagePath,
       }
       if (editingItem) {
         await updateDoc(doc(db, 'items', editingItem.id), data)
@@ -160,7 +162,6 @@ export default function AdminPage() {
       return
     }
     try {
-      if (item.storagePath) await deleteObject(ref(storage, item.storagePath))
       await deleteDoc(doc(db, 'items', item.id))
       fetchItems()
     } catch (err) {

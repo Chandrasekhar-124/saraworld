@@ -1,11 +1,9 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
-
 const apiKey = process.env.NEXT_PUBLIC_FB_API_KEY
 
-let auth, db, storage
+let auth, db
 
 if (apiKey) {
   const app = initializeApp({
@@ -18,7 +16,6 @@ if (apiKey) {
   })
   auth = getAuth(app)
   db = getFirestore(app)
-  storage = getStorage(app)
 }
 
-export { auth, db, storage }
+export { auth, db }
