@@ -275,7 +275,7 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 4
 
 /* Item grid — vertical cards with large image */
 .item-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+  display: grid; grid-template-columns: 1fr; gap: 1.2rem;
 }
 
 .item-card {
@@ -285,7 +285,7 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 4
 }
 .item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(232,180,184,0.2); }
 
-.item-img { width: 100%; aspect-ratio: 1; }
+.item-img { width: 100%; aspect-ratio: 3/4; }
 .item-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .item-info {
@@ -530,6 +530,7 @@ input:focus { border-color: var(--rose); box-shadow: 0 0 0 3px var(--glow); }
 /* ===== RESPONSIVE ===== */
 @media (min-width: 640px) {
   .item-grid { grid-template-columns: repeat(2, 1fr); }
+  .item-img { aspect-ratio: 1; }
   .social-grid { grid-template-columns: repeat(3, 1fr); }
   .admin-grid { grid-template-columns: repeat(3, 1fr); }
 }
