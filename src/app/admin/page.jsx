@@ -45,6 +45,7 @@ export default function AdminPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [toast, setToast] = useState('')
   const [demoUser, setDemoUser] = useState(false)
   const [selectedCat, setSelectedCat] = useState('studs')
   const [items, setItems] = useState([])
@@ -98,6 +99,8 @@ export default function AdminPage() {
     }
   }
 
+  function notify(msg) { setToast(msg); setTimeout(() => setToast(''), 3000) }
+
   function clearForm() {
     setItemName(''); setItemPrice(''); setItemDesc('')
     setItemFile(null); setItemCustom(false); setEditingItem(null)
@@ -124,6 +127,7 @@ export default function AdminPage() {
       } else {
         setItems(prev => [{ id: `demo-${Date.now()}`, name: itemName.trim(), price: itemPrice.trim(), description: itemDesc.trim(), customizable: itemCustom, imageUrl: url }, ...prev])
       }
+      notify(editingItem ? 'Item updated!' : 'Item added successfully!')
       clearForm()
       setUploading(false)
       return
@@ -147,6 +151,7 @@ export default function AdminPage() {
       } else {
         await addDoc(collection(db, 'items'), { ...data, createdAt: serverTimestamp() })
       }
+      notify(editingItem ? 'Item updated!' : 'Item added successfully!')
       clearForm()
       fetchItems()
     } catch (err) {
@@ -163,6 +168,7 @@ export default function AdminPage() {
     }
     try {
       await deleteDoc(doc(db, 'items', item.id))
+      notify('Item deleted!')
       fetchItems()
     } catch (err) {
       setError('Delete failed: ' + err.message)
@@ -240,6 +246,7 @@ export default function AdminPage() {
 
       {DEMO && <p className="error" style={{ background: '#fff3cd', color: '#856404', borderColor: '#ffc107' }}>Demo Mode — Firebase not connected. Changes are local only.</p>}
       {error && <p className="error">{error}</p>}
+      {toast && <div className="toast-success">{toast}</div>}
 
       <div className="admin-section">
         <h3>Manage Items</h3>
